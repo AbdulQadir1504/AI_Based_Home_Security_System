@@ -1,0 +1,9 @@
+# Web Frameworks
+fastapi
+uvicorn
+streamlit
+requests
+opencv-python-headless
+face-recognition
+numpy<2.0.0
+streamlit-webrtc
