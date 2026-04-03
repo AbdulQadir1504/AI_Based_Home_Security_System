@@ -1,20 +1,20 @@
 import os
 
 # Video Settings
-VIDEO_CAPTURE_DEVICE = 0  # For webcam (may not work in cloud)
+VIDEO_CAPTURE_DEVICE = 0
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 480
 FRAME_RATE = 30
 
-# Face Recognition
+# Face Recognition Settings
 UNKNOWN_FACE_THRESHOLD = 0.6
-FACE_MODEL = 'hog'  # Use 'hog' for speed in cloud
-FACE_RECOGNITION_MODEL = 'VGG-Face'
+FACE_MODEL = 'hog'  # 'hog' for speed, 'cnn' for accuracy
+TOLERANCE = 0.6
 
 # Alert Settings
 ALERT_TRIGGER_COOLDOWN = 5  # seconds
 MAX_ALERT_DISPLAY_TIME = 3  # seconds
-ALERT_SOUND_ENABLED = False  # Disable sound in cloud
+ALERT_SOUND_ENABLED = False  # Disable sound for cloud
 
 # Paths
 KNOWN_FACES_DIR = 'known_faces'
