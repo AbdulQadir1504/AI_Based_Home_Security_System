@@ -154,3 +154,63 @@ def display_alert_on_frame(frame, alert_info, alert_display_time=3):
     cv2.putText(frame, confidence_text, (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     
     return frame
+import streamlit as st
+from datetime import datetime
+import os
+
+class AlertSystem:
+    def __init__(self, log_file='security_alerts.log'):
+        self.log_file = log_file
+        self.alert_count = 0
+        
+        # Initialize session state for alerts
+        if 'alerts_list' not in st.session_state:
+            st.session_state.alerts_list = []
+    
+    def trigger_alert(self, confidence, person_id="Unknown", location="Camera"):
+        """Trigger a security alert"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        alert = {
+            'timestamp': timestamp,
+            'person_id': person_id,
+            'confidence': confidence,
+            'location': location,
+            'message': f"INTRUSION ALERT: Unknown person detected!"
+        }
+        
+        # Store in session state
+        st.session_state.alerts_list.insert(0, alert)
+        self.alert_count += 1
+        
+        # Log to file
+        self._log_to_file(alert)
+        
+        return alert
+    
+    def _log_to_file(self, alert):
+        """Write alert to log file"""
+        try:
+            with open(self.log_file, 'a') as f:
+                f.write(f"\n[{alert['timestamp']}] {alert['message']}\n")
+                f.write(f"  Confidence: {alert['confidence']:.2f}\n")
+                f.write(f"  Location: {alert['location']}\n")
+                f.write("-" * 50 + "\n")
+        except Exception as e:
+            print(f"Error writing to log: {e}")
+    
+    def get_statistics(self):
+        """Get alert statistics"""
+        return {
+            'total_alerts': self.alert_count,
+            'recent_alerts': len(st.session_state.alerts_list)
+        }
+    
+    def get_recent_alerts(self, count=5):
+        """Get recent alerts"""
+        return st.session_state.alerts_list[:count]
+    
+    def clear_alerts(self):
+        """Clear all alerts"""
+        st.session_state.alerts_list = []
+        self.alert_count = 0
